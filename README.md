@@ -1,6 +1,6 @@
 # restaurant_list
 
-<img src="" alt="專案首頁">
+<img src="https://github.com/isaaccao0522/restaurant_list/blob/main/cover.png" alt="專案首頁">
 <section class="Develop tools">
   <h3>Develop tools</h3>
   <ul>
