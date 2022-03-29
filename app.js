@@ -1,8 +1,8 @@
-const express = require ('express')                         //使用express
-const app = express ()                                      //app.js採用express驅動
+const express = require ('express')                        //載入框架:express
+const app = express ()                                     
 const port = 3000
-const exphbs = require ('express-handlebars')               //使用express-handlebars
-const restaurantList = require ('./restaurant.json')        //使用'restaurant.json'
+const exphbs = require ('express-handlebars')               //載入套件:express-handlebars
+const restaurantList = require ('./restaurant.json')        //載入餐廳資料:restaurant.json
 const results = restaurantList.results
 
 
@@ -16,25 +16,31 @@ app.get ( '/', (req,res) => {                                   //取得首頁�
     res.render ( 'index', {restaurants: results})
 })
 
-app.get ( '/restaurants/:id', (req,res) => {                    //取得餐廳詳細資料,渲染show
+
+//取得餐廳詳細資料,渲染show
+app.get ( '/restaurants/:id', (req,res) => {                    //以id為「動態路由」的辨識依據
     // console.log ( 'req.query', req.query)
-    const restaurantFind = results.find ( restaurant =>         //以id以id
-        restaurant.id.toString () === req.params.id
+    const restaurantFind = results.find ( restaurant =>         //設定變數restaurantList.results,使用.find()
+        restaurant.id.toString () === req.params.id             //.toString()將數字轉為字串,須與req.params.id相同
     )
-    res.render ( 'show', { restaurant: restaurantFind})
+    res.render ( 'show', { restaurant: restaurantFind})         //渲染show頁面
 })
 
-app.get ( '/search', (req,res) => {
+
+//search bar效果
+app.get ( '/search', (req,res) => {                             
     // console.log ( 'req.query', req.query)
-    const keyword =req.query.keyword
-    const restaurantFilter = results.filter ( restaurant => {
-        const text = [ restaurant.name, restaurant.category]
-        return text.some (
-            text => text.toLowerCase ().includes ( keyword.toLocaleLowerCase()))        
-    })
-    res.render ( 'index', { restaurants: restaurantFilter, keyword:keyword})
-})
+    const keyword =req.query.keyword                            //定義變數:keyword,關鍵字輸入後作為搜尋依據
+    const restaurantFilter = results.filter ( restaurant => {   //.filter()過濾搜尋字串
+        const text = [ restaurant.name, restaurant.category]    //設定搜尋範圍:[name、category]
+        return text.some (                                      //.some():其1符合條件即回傳
+            text => text.toLowerCase ().includes ( keyword.toLowerCase()))        
+    })          //.toLowerCase:小寫字體也包含
+    res.render ( 'index', { restaurants: restaurantFilter, keyword:keyword})  // 渲染index,顯示搜尋結果,keyword保留在search bar              
+})                                                                            
 
+
+//啟用、監聽伺服器
 app.listen ( port, () => {
     console.log (`localhost:${port}`)
 })
